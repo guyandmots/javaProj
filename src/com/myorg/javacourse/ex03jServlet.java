@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 public class ex03jServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		resp.setContentType("text/plain");
+		resp.setContentType("text/html");
 		resp.getWriter().println("Hello, world"+ "");
 	}
 }
