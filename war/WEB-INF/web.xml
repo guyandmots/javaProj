@@ -15,12 +15,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet-mapping>
 	
 			<servlet>
-		<servlet-name>ifbc</servlet-name>
+		<servlet-name>ex03j</servlet-name>
 		<servlet-class>com.myorg.javacourse.ex03jServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>iffff</servlet-name>
-		<url-pattern>/iffff</url-pattern>
+		<servlet-name>ex03j</servlet-name>
+		<url-pattern>/ex03j</url-pattern>
 	</servlet-mapping>
 	
 	
