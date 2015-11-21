@@ -9,11 +9,8 @@ public class ex03jServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("text/html");
-		MathJa mathja= new MathJa(50, 30, 50, 2,3 );
-		
-		
+		MathJa mathja = new MathJa();
 		String resultStr=mathja.getResults();
-		
 		resp.getWriter().println("Results: "+"<br>"+ resultStr);
 	}
 }
