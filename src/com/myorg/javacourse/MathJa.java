@@ -28,7 +28,7 @@ public class MathJa {
 		String line1, line2, line3, resultStr;
 		line1= ("Calculation 1: area of circle with radius " +radius+" is:"+ MathJa.calcCircleArea(30));
 		line2=("lenght of opposite where angle is: "+" 30"+ "is "+MathJa.calcOpposite(30, 50));
-		line3=("power of "+ base+" with exp "+ exp+" is "+MathJa.calcPower(2,3));
+		line3=("power of "+ base+" with exp "+ exp+" is "+MathJa.calcPower(13,20));
 		resultStr=line1+"<br>"+line2+"<br>"+line3;
 		return resultStr;
 	}
