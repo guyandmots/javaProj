@@ -4,14 +4,6 @@ public class MathJa {
 
 	private int radius, hypotenuse, base, exp;
 	private double angleB;
-	public MathJa(int radiusVal, double angleBVal, int hypotenuseVal, int baseVal, int expVal)
-	{
-		radius=radiusVal;
-		angleB=angleBVal;
-		hypotenuse=hypotenuseVal;
-		base=baseVal;
-		exp=expVal;
-	}
 	
 	public static double calcCircleArea(int radiusVal)
 	{
