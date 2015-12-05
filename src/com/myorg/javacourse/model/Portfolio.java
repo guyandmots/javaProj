@@ -1,5 +1,5 @@
 package com.myorg.javacourse.model;
-import com.myorg.javacourse.Stock;
+import com.myorg.javacourse.model.Stock;
 
 public class Portfolio {
 	

@@ -1,6 +1,6 @@
 package com.myorg.javacourse.service;
 import java.util.Calendar;
-import com.myorg.javacourse.Stock;
+import com.myorg.javacourse.model.Stock;
 import com.myorg.javacourse.model.Portfolio;
 
 public class PortfolioManager {

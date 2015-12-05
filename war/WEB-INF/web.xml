@@ -13,18 +13,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/guyandamotsproj</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
-		<servlet-name>ex03j</servlet-name>
-		<servlet-class>com.myorg.javacourse.ex03jServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ex03j</servlet-name>
-		<url-pattern>/ex03j</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>StockDetails</servlet-name>
-		<servlet-class>com.myorg.javacourse.StockDetailsServlet</servlet-class>
+		<servlet-class>com.myorg.javacourse.servlet.StockDetailsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StockDetails</servlet-name>
