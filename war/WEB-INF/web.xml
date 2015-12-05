@@ -9,12 +9,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-class>com.myorg.javacourse.GuyandamotsprojServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-	
 		<servlet-name>Guyandamotsproj</servlet-name>
 		<url-pattern>/guyandamotsproj</url-pattern>
 	</servlet-mapping>
 	
-			<servlet>
+	<servlet>
 		<servlet-name>ex03j</servlet-name>
 		<servlet-class>com.myorg.javacourse.ex03jServlet</servlet-class>
 	</servlet>
@@ -23,9 +22,25 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/ex03j</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>StockDetails</servlet-name>
+		<servlet-class>com.myorg.javacourse.StockDetailsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StockDetails</servlet-name>
+		<url-pattern>/stockdetails</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Portfolio</servlet-name>
+		<servlet-class>com.myorg.javacourse.servlet.Portfolioservlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Portfolio</servlet-name>
+		<url-pattern>/portfolio</url-pattern>
+	</servlet-mapping>
 	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 </web-app>
-
