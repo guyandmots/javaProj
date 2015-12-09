@@ -21,6 +21,19 @@ public class Stock {
 		this.bid = bid;
 		this.buyingDate = buyingDate;
 	}
+<<<<<<< HEAD
+=======
+	public Stock(String symbol, float ask, float bid){
+		this.symbol = symbol;
+		this.ask = ask;
+		this.bid = bid;
+		
+	}
+	public Stock(Stock stock){
+		this(stock.getSymbol(),stock.getAsk(),stock.getBid());
+		this.buyingDate= new Date (stock.getDate().getTime());	
+	}
+>>>>>>> branch 'master' of https://github.com/guyandmots/javaProj.git
 	public String getSymbol() {
 		return symbol;
 	}
