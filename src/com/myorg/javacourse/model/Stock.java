@@ -31,6 +31,7 @@ public class Stock {
 		this.bid = bid;
 		this.buyingDate = buyingDate;
 	}
+
 	
 	/**
 	 * A constructor thats builds a stock by parameters.
@@ -38,6 +39,7 @@ public class Stock {
 	 * @param ask is the ask value of the stock.
 	 * @param bid is the bid value of the stock.
 	 */
+
 	public Stock(String symbol, float ask, float bid){
 		this.symbol = symbol;
 		this.ask = ask;
@@ -53,7 +55,6 @@ public class Stock {
 		this(stock.getSymbol(),stock.getAsk(),stock.getBid());
 		this.buyingDate = new Date (stock.getDate().getTime());	
 	}
-	
 	public String getSymbol() {
 		return symbol;
 	}
