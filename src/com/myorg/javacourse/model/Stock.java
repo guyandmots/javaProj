@@ -3,19 +3,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.algo.model.StockInterface;
+
+import com.myorg.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
+
 /**
  * An instance of this class represents a stock.
  * @author Guy Naamati & Amots mor
  *
  */
-public class Stock {
+public class Stock implements StockInterface{
+	
 	private String symbol;
 	private float ask, bid;
 	private Date buyingDate;
-	private enum recommendatio{BUY,SELL,REMOVE,HOLD};
-	private int stockQuantity;
-	private float balance;
-	
+	private ALGO_RECOMMENDATION recommendation;
+	public int stockQuantity;
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 	
 	/**
@@ -55,6 +58,11 @@ public class Stock {
 		this(stock.getSymbol(),stock.getAsk(),stock.getBid());
 		this.buyingDate = new Date (stock.getDate().getTime());	
 	}
+	public Stock() {
+	   this.setQuantity(0);
+	}
+
+
 	public String getSymbol() {
 		return symbol;
 	}
@@ -74,11 +82,22 @@ public class Stock {
 	public float getBid() {
 		return bid;
 	}
+	public int getStockQuantity(){
+		return stockQuantity;
+	}
 	
 	public void setBid(float bid) {
 		this.bid = bid;
 	}
 	
+	public int getQuantity() {
+		return stockQuantity;
+	}
+	
+	public void setQuantity(int quantity) {
+		this.stockQuantity = quantity;
+	}
+
 	public Date getDate() {
 		return buyingDate;
 	}
@@ -86,9 +105,7 @@ public class Stock {
 	public void setDate(Date buyingDate) {
 		this.buyingDate = buyingDate;
 	}
-	public void updateBalance(float amount){
-	this.balance+= amount;
-	}
+
 	
 	public String getHtmlDescription(){
 		String stockDetails = "<b>Stock symbol:</b> " + getSymbol() + 
