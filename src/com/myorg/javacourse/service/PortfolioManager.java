@@ -10,6 +10,7 @@ import java.util.Map;
 import org.algo.dto.PortfolioDto;
 import org.algo.dto.PortfolioTotalStatus;
 import org.algo.dto.StockDto;
+import org.algo.exception.PortfolioException;
 import org.algo.exception.SymbolNotFoundInNasdaq;
 import org.algo.model.PortfolioInterface;
 import org.algo.model.StockInterface;
@@ -18,10 +19,12 @@ import org.algo.service.MarketService;
 import org.algo.service.PortfolioManagerInterface;
 import org.algo.service.ServiceManager;
 
+import com.myorg.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
 import com.myorg.javacourse.model.Stock;
 import com.myorg.javacourse.model.Portfolio;
 
-public class PortfolioManager implements PortfolioManagerInterface {
+
+public class PortfolioManager implements PortfolioManagerInterface{
 	private DatastoreService datastoreService = ServiceManager.datastoreService();
 
 	public PortfolioInterface getPortfolio() {
@@ -112,14 +115,19 @@ public class PortfolioManager implements PortfolioManagerInterface {
 
 		return ret;
 	}
-
+	
+	public void setTitle(String title){
+		Portfolio portfolio = (Portfolio) getPortfolio();
+		portfolio.setTitle(title);
+   }
+		
 	/**
 	 * Add stock to portfolio 
 	 */
 	@Override
 	public void addStock(String symbol) {
+		
 		Portfolio portfolio = (Portfolio) getPortfolio();
-
 		try {
 			StockDto stockDto = ServiceManager.marketService().getStock(symbol);
 			
@@ -130,16 +138,72 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			portfolio.addStock(stock);   
 			//or:
 			//portfolio.addStock(stock);   
-
 			//second thing, save the new stock to the database.
 			datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
-			
 			flush(portfolio);
 		} catch (SymbolNotFoundInNasdaq e) {
 			System.out.println("Stock Not Exists: "+symbol);
 		}
 	}
+	
+    public void sellStock(String symbol, int quantity) 
+	{
+		Portfolio portfolio = (Portfolio) getPortfolio();
+		try {
+		
+			StockDto stockDto = ServiceManager.marketService().getStock(symbol);
+			Stock stock = fromDto(stockDto);
+			portfolio.sellStock(stock.getSymbol(), quantity);
+			datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+			flush(portfolio);
+		
+	}
+		  catch (SymbolNotFoundInNasdaq e) {
+				System.out.println("Can not sell stock "+symbol);
+			     }
+			     }
 
+	public void buyStock (String symbol, int quantity)
+
+	{
+		Portfolio portfolio = (Portfolio) getPortfolio();
+		try {
+		
+			StockDto stockDto = ServiceManager.marketService().getStock(symbol);
+			Stock stock = fromDto(stockDto);
+			portfolio.buyStock(stock,quantity);
+			datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+			flush(portfolio);
+			
+		}
+         catch (SymbolNotFoundInNasdaq e) {
+		System.out.println("Can not buy stock "+symbol);
+	     }
+	 }
+	
+	public void removeStock(String symbol){
+		Portfolio portfolio = (Portfolio) getPortfolio();
+		try {
+		
+			StockDto stockDto = ServiceManager.marketService().getStock(symbol);
+			Stock stock = fromDto(stockDto);
+			portfolio.removeStock(stock.getSymbol());
+			datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+			flush(portfolio);
+			
+		}
+         catch (SymbolNotFoundInNasdaq e) {
+		System.out.println("Can not remove stock "+symbol);
+	     }
+	}
+
+	public void updateBalance(float value){
+		Portfolio portfolio = (Portfolio) getPortfolio();
+		portfolio.updateBalance(value);
+		flush(portfolio);
+		
+		
+	}
 	/**
 	 * update database with new portfolio's data
 	 * @param portfolio
@@ -162,7 +226,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		newStock.setDate(stockDto.getDate());
 		newStock.setQuantity(stockDto.getQuantity());
 		if(stockDto.getRecommendation() != null) 
-			newStock.setRecommendation(ALGO_RECOMMENDATION.valueOf(stockDto.getRecommendation()));
+			newStock.setRecommendation(Portfolio.ALGO_RECOMMENDATION.valueOf(stockDto.getRecommendation()));
 
 		return newStock;
 	}
@@ -178,6 +242,10 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		}
 		
 		Stock stock = (Stock) inStock;
+		if(stock.getRecommendation()==null)
+		{
+			stock.setRecommendation(ALGO_RECOMMENDATION.HOLD);
+		}
 		return new StockDto(stock.getSymbol(), stock.getAsk(), stock.getBid(), 
 				stock.getDate(), stock.getStockQuantity(), stock.getRecommendation().name());
 	}
@@ -219,7 +287,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			ret = new Portfolio(stockArray);
 		}
 
-		ret.setPortfolioTitle(dto.getTitle());
+		ret.setTitle(dto.getTitle());
 		try {
 			ret.updateBalance(dto.getBalance());
 		} catch (Exception e) {
@@ -244,7 +312,6 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		return ret;
 	}	
 	
-		Calendar c = Calendar.getInstance();
 		/*
 		c.set(2014,  11,  15);
 		Portfolio myPortfolio = new Portfolio("Exercise 7 portfolio");
@@ -259,4 +326,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		myPortfolio.removeStock("CAAS");
 		return myPortfolio;
 		*/
-	}
+		
+	
+
+}

@@ -13,9 +13,8 @@ public class Portfolio implements PortfolioInterface {
     public enum ALGO_RECOMMENDATION {BUY, SELL, REMOVE, HOLD};
 	private final static int MAX_PORTFOLIO_SIZE = 5;
 	private String title;
-	private Stock[] stocks;
+	private StockInterface[] stocks;
 	private int portfolioSize;
-
 	private float balance;
 	
 	/**
@@ -43,21 +42,54 @@ public class Portfolio implements PortfolioInterface {
 	public Portfolio(Portfolio portfolio){
 		stocks = new Stock[MAX_PORTFOLIO_SIZE];
 		for (int i = 0; i < portfolio.portfolioSize; i++){
-			this.stocks[i] = new Stock(portfolio.stocks[i]);
+			this.stocks[i] = new Stock((Stock) portfolio.stocks[i]);
 		}
 		this.portfolioSize = portfolio.portfolioSize;
 		this.title = portfolio.title;
 	}
 	
+
 	public Portfolio(Stock[] stockArray) {
-		// TODO Auto-generated constructor stub
+		for (int i = 0; i < stockArray.length; i++){
+			this.stocks[i] = new Stock(stockArray[i]);
+	}
+		this.portfolioSize=stockArray.length;
 	}
 
+	public static int getMaxSize() {
+		return MAX_PORTFOLIO_SIZE;
+	}
+	
+	
 	public String getTitle(){
 		return this.title;
 	}
+	public float getStocksValue() {
+		int totalStocksValue = 0;
+		for (int i = 0; i < portfolioSize; i++) {
+			totalStocksValue += this.stocks[i].getBid() * ((Stock) this.stocks[i]).getQuantity();
+		}
+		return totalStocksValue;
+	}
 	
-	public void setPortfolioTitle(String title){
+	public StockInterface[] getStocks(){
+		return stocks;
+	}
+	
+	public float getBalance() {
+		return balance;
+	}
+		
+	public int getPortfolioSize(){
+		return portfolioSize;
+	}
+
+	public float getTotalValue() {
+		return getStocksValue() + getBalance();
+	}
+
+	
+	public void setTitle(String title){
 		this.title=  title;
 	}
 	/**
@@ -69,6 +101,9 @@ public class Portfolio implements PortfolioInterface {
 	 * @param stock is the stock we want to add.
 	 * @return If the stock is already in the portfolio, returns the place its appears. If the portfolio is full, returns -1.
 	 */
+
+
+
 	public int addStock(Stock stock){
 		if(portfolioSize == MAX_PORTFOLIO_SIZE) {
 			System.out.print("Can't add new stock, portfolio can have only " + MAX_PORTFOLIO_SIZE + " stocks!");
@@ -85,7 +120,7 @@ public class Portfolio implements PortfolioInterface {
 			}
 			if (stockAlreadyExists == false){
 				stocks[portfolioSize] = stock;
-				stocks[portfolioSize++].setQuantity(0);;
+				((Stock) stocks[portfolioSize++]).setQuantity(0);;
 				return portfolioSize -1;
 			}
 			else {
@@ -93,19 +128,6 @@ public class Portfolio implements PortfolioInterface {
 			}
 		}
 	}
-
-	public StockInterface[] getStocks(){
-		return stocks;
-	}
-	
-	public float getBalance() {
-		return balance;
-	}
-		
-	public int getPortfolioSize(){
-		return portfolioSize;
-	}
-
 	/**
 	 * Increasing or decreasing the balance. balance can't be negative.
 	 * @param amount is the amount to add/reduce from the balance.
@@ -138,7 +160,7 @@ public class Portfolio implements PortfolioInterface {
 	 * @param symbol is the symbol of the stock which the method removes.
 	 * @return a boolean value, true if removing was succeeded and false if not.
 	 */
-	public boolean removeStock(String symbol){
+	public void removeStock(String symbol){
 		sellStock(symbol, -1);
 		int i;
 		boolean flag = false;
@@ -149,13 +171,12 @@ public class Portfolio implements PortfolioInterface {
 			}
 		}
 		if (!flag)
-			return false;
+			//exception
 		while (i < portfolioSize - 1){
 			stocks[i] = stocks[i + 1];
 			i++;
 		}
 		stocks[portfolioSize--] = null;
-		return true;
 	}
 	
 	/**
@@ -164,26 +185,23 @@ public class Portfolio implements PortfolioInterface {
 	 * @param quantity is the quantity of stocks to sell, if there are enough of it to sell.
 	 * @return a boolean value, true if selling was succeeded, false if not.
 	 */
-	public boolean sellStock (String symbol, int quantity){
-		boolean flag = false;
+	public void sellStock (String symbol, int quantity){
+		
 		for (int i = 0; i < portfolioSize; i++) {
 			if (stocks[i].getSymbol().equals(symbol)){
-				flag = true;
 				if (quantity == -1){
-					this.updateBalance(stocks[i].getBid() * stocks[i].getQuantity());
-					stocks[i].setQuantity(0);;;
+					this.updateBalance(stocks[i].getBid() * ((Stock) stocks[i]).getQuantity());
+					((Stock) stocks[i]).setQuantity(0);;;
 				}
-				else if (quantity > stocks[i].getQuantity()){
+				else if (quantity > ((Stock) stocks[i]).getQuantity()){
 					System.out.println("Not enough stocks to sell!");
-					flag = false;
 				}
 				else{
 					this.updateBalance(stocks[i].getBid() * quantity);
-					stocks[i].setQuantity(stocks[i].getQuantity() - quantity);
+					((Stock) stocks[i]).setQuantity(((Stock) stocks[i]).getQuantity() - quantity);
 				}
 			}
 		}
-		return flag;
 	}
 
 	/**
@@ -192,14 +210,13 @@ public class Portfolio implements PortfolioInterface {
 	 * @param quantity is the quantity of stocks to buy.
 	 * @return a boolean value- true if buying was succeeded, false if not.
 	 */
-	public boolean buyStock (Stock stock, int quantity) {
+	public void buyStock (Stock stock, int quantity) {
 		if (stock.getAsk() * quantity > this.getBalance()) {
 			System.out.println("Not enough balance to complete purchase");
-			return false;
 		}
 		int stockLocation = addStock(stock);
 		if (stockLocation == -1) {
-			return false;
+			//exception
 		}
 		else {
 			if (quantity == -1) {
@@ -212,7 +229,6 @@ public class Portfolio implements PortfolioInterface {
 				this.updateBalance(-(quantity * stock.getAsk()));
 			}
 		}
-		return true;
 	}
 
 
@@ -222,34 +238,35 @@ public class Portfolio implements PortfolioInterface {
 	 * @author Amots Mor.
 	 */
 	public void changeBidOfLastStock(float bid){
-		this.stocks[this.portfolioSize - 1].setBid(bid);
+		((Stock) this.stocks[this.portfolioSize - 1]).setBid(bid);
 	}
 	
-	public float getStocksValue() {
-		int totalStocksValue = 0;
-		for (int i = 0; i < portfolioSize; i++) {
-			totalStocksValue += this.stocks[i].getBid() * this.stocks[i].getQuantity();
-		}
-		return totalStocksValue;
-	}
-	
-
-	public float getTotalValue() {
-		return getStocksValue() + getBalance();
-	}
 
 	public String getHtmlString(){
 		String portfolioString = new String("<h1>" + this.title + "</h1>");
 		for (int i = 0; i < this.portfolioSize; i++) {
-			portfolioString += stocks[i].getHtmlDescription() + "<br>";
+			portfolioString += ((Stock) stocks[i]).getHtmlDescription() + "<br>";
 		}
 		portfolioString += "Total portfolio value: " + getTotalValue() + "<br> Total stocks value: " 
 		+ getStocksValue() + "<br> Balance: " + getBalance();
 		return portfolioString;
 	}
 
+	public Stock findStock(String symbol) {
+		for (int i = 0; i < portfolioSize; i++) 
+			if (symbol.equals(stocks[i].getSymbol()))
+				return (Stock) stocks[i];
+		return null;
+		
+		
+	}
+}
+
+	
+
+	
 
 
 	
-}
+
 

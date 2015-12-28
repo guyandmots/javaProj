@@ -1,6 +1,5 @@
 package com.myorg.javacourse.model;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.algo.model.StockInterface;
@@ -14,6 +13,7 @@ import com.myorg.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
  */
 public class Stock implements StockInterface{
 	
+
 	private String symbol;
 	private float ask, bid;
 	private Date buyingDate;
@@ -55,10 +55,14 @@ public class Stock implements StockInterface{
 	 * @param stock is the original instance to copy from.
 	 */
 	public Stock(Stock stock){
+
 		this(stock.getSymbol(),stock.getAsk(),stock.getBid());
 		this.buyingDate = new Date (stock.getDate().getTime());	
 	}
+	
 	public Stock() {
+		//buyingDate=new Date();
+		//recommendation= ALGO_RECOMMENDATION.NONE;
 	   this.setQuantity(0);
 	}
 
@@ -82,6 +86,7 @@ public class Stock implements StockInterface{
 	public float getBid() {
 		return bid;
 	}
+	
 	public int getStockQuantity(){
 		return stockQuantity;
 	}
@@ -105,12 +110,20 @@ public class Stock implements StockInterface{
 	public void setDate(Date buyingDate) {
 		this.buyingDate = buyingDate;
 	}
+   public ALGO_RECOMMENDATION getRecommendation(){
+	 return recommendation;
+   }
+	public void setRecommendation(ALGO_RECOMMENDATION newRecommendation) {
+		  this.recommendation=newRecommendation;
+		
+	}
 
-	
 	public String getHtmlDescription(){
 		String stockDetails = "<b>Stock symbol:</b> " + getSymbol() + 
 				" <b>bid:</b> " + getBid() + " <b>ask: </b> "
 				+ getAsk() + " <b>date:</b> " + this.sdf.format(this.buyingDate);
 		return stockDetails;
 	}
+
 }
+
